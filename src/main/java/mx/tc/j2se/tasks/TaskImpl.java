@@ -15,8 +15,9 @@ package mx.tc.j2se.tasks;
 * */
 public class TaskImpl implements Task{
 
+
     private String title;           // Title of the task
-    private int time;               // Time of execution of the task
+    //private int time;               // Time of execution of the task
     private int start;              // Start of execution of the task
     private int end;                // End of execution of the task
     private int interval;           // Interval of execution of the task
@@ -35,10 +36,10 @@ public class TaskImpl implements Task{
     * @param time
     *  */
     public TaskImpl(String title, int time) {
-        this.active = false;
-        this.repeated = false;
-        this.title = title;
-        this.time = time;
+        this.setActive(false);
+        //this.repeated = false;
+        this.setTitle(title);
+        this.setTime(time);
     }
 
     /*
@@ -50,7 +51,6 @@ public class TaskImpl implements Task{
     * */
     public TaskImpl(String title, int start, int end, int interval) {
         this.active = false;
-        this.repeated = true;
         this.title = title;
         this.start = start;
         this.end = end;
@@ -99,14 +99,7 @@ public class TaskImpl implements Task{
     * */
     @Override
     public int getTime() {
-        int time;                          // Time of the task
-        boolean r = isRepeated();
-        if (r) {
-            time = this.start;
-        }else {
-            time = this.time;
-        }
-        return time;
+        return this.start;
     }
 
     /*
@@ -115,9 +108,9 @@ public class TaskImpl implements Task{
     * */
     @Override
     public void setTime(int time) {
-        this.time = time;
-        active = true;
-        isRepeated();
+        this.start = time;
+        this.end = time;
+        this.interval = 0;
     }
 
     /*
@@ -126,14 +119,7 @@ public class TaskImpl implements Task{
     * */
     @Override
     public int getStartTime() {
-        int startTime;                     // Start time of the task
-
-        if (this.interval != 0) {
-            startTime = this.start;
-        }else {
-            startTime = this.time;
-        }
-        return startTime;
+        return this.start;
     }
 
     /*
@@ -142,14 +128,7 @@ public class TaskImpl implements Task{
      * */
     @Override
     public int getEndTime() {
-        int endTime;                       //End time of the task
-
-        if (this.interval != 0) {
-            endTime = this.end;
-        }else {
-            endTime = this.time;
-        }
-        return endTime;
+        return this.end;
     }
 
     /*
@@ -169,12 +148,15 @@ public class TaskImpl implements Task{
     * */
     @Override
     public void setTime(int start, int end, int interval) {
+        if((start > end) || (interval > (end - start))) { //
+            System.out.println("The start time and interval cannot be greater than the end time to be a repetitive task");
+            return;
+        }
         this.start = start;
         this.end = end;
         this.interval = interval;
         if (!isRepeated()) {
-            this.interval = 1;
-            isRepeated();
+            this.repeated = true;
         }
     }
 
@@ -184,16 +166,20 @@ public class TaskImpl implements Task{
     * */
     @Override
     public boolean isRepeated() {
-        int interval = this.interval;       //Local variable for the interval value
-        if(interval == 0){
-            repeated = false;
-        }else if(interval > 0) {
-            repeated = true;
-        }else{
-            System.out.println("Interval must be greater than zero for" +
-                    " repetitive tasks or 0 for non-repetitive tasks");
+        if(this.interval <= (this.end - this.start) && this.start < this.end) {
+            if ((this.interval == 0 && this.repeated)) {
+                System.out.println("This will run forever");
+                return true; //endless loop
+            } else if (this.interval > 0) {
+                return true;
+            } else {
+                System.out.println("Interval must be greater than zero for " +
+                                   "repetitive tasks");
+                return false;
+            }
+        }else {
+            return false;
         }
-        return repeated;
     }
 
     /*
@@ -204,16 +190,21 @@ public class TaskImpl implements Task{
     public int nextTimeAfter(int current) {
         int startTime = getTime();         //Local variable for the start time of the task
         int endTime = getEndTime();        //Local variable for the end time of the task
+        int next;
         if (!isActive()){
             return -1;
         }
         if (current < startTime) {
             return startTime;
-        }else if(current >= startTime && current < endTime) {
-            int elapsed = current - startTime;
-            int intervalIndex = (elapsed/this.interval) + 1;
-            int next = (this.interval * intervalIndex);
-            return next;
+        }
+        if((current + this.interval) <= endTime) {
+            if (this.interval != 0) {
+                int elapsed = current - startTime;
+                next = startTime + elapsed + this.interval;
+                return next;
+
+
+            }
         }
         return -1;
     }
