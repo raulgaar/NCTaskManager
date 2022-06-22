@@ -250,16 +250,17 @@ class TaskTest {
         task.setActive(true);
         assertTrue(task.isActive());
 
-        task.setTime(6, 36, 3);
+        task.setTime(6, 36, 2);
         assertEquals(6, task.getTime());
         assertEquals(6, task.getStartTime());
         assertEquals(36, task.getEndTime());
         assertTrue(task.isRepeated());
-        assertEquals(3, task.getRepeatInterval());
+        assertEquals(2, task.getRepeatInterval());
         assertTrue(task.isActive());
         assertEquals(6, task.nextTimeAfter(0));
-        assertEquals(9, task.nextTimeAfter(6));
-        assertEquals(19, task.nextTimeAfter(16));
+        assertEquals(8, task.nextTimeAfter(6));
+        assertEquals(14, task.nextTimeAfter(13));
+        assertEquals(18, task.nextTimeAfter(17));
         assertEquals(-1, task.nextTimeAfter(35));
         assertEquals(-1, task.nextTimeAfter(36));
         assertEquals(-1, task.nextTimeAfter(46));
