@@ -35,8 +35,8 @@ public class TaskImpl implements Task{
     * @param time
     *  */
     public TaskImpl(String title, int time) {
-        active = false;
-        repeated = false;
+        this.active = false;
+        this.repeated = false;
         this.title = title;
         this.time = time;
     }
@@ -49,8 +49,8 @@ public class TaskImpl implements Task{
     * @param interval
     * */
     public TaskImpl(String title, int start, int end, int interval) {
-        active = false;
-        repeated = true;
+        this.active = false;
+        this.repeated = true;
         this.title = title;
         this.start = start;
         this.end = end;
@@ -116,7 +116,8 @@ public class TaskImpl implements Task{
     @Override
     public void setTime(int time) {
         this.time = time;
-        repeated = false;
+        active = true;
+        isRepeated();
     }
 
     /*
@@ -172,7 +173,8 @@ public class TaskImpl implements Task{
         this.end = end;
         this.interval = interval;
         if (!isRepeated()) {
-            this.repeated = true;
+            this.interval = 1;
+            isRepeated();
         }
     }
 
@@ -202,8 +204,8 @@ public class TaskImpl implements Task{
     public int nextTimeAfter(int current) {
         int startTime = getTime();         //Local variable for the start time of the task
         int endTime = getEndTime();        //Local variable for the end time of the task
-        if(!isActive()) {
-        return -1;
+        if (!isActive()){
+            return -1;
         }
         if (current < startTime) {
             return startTime;
@@ -212,8 +214,6 @@ public class TaskImpl implements Task{
             int intervalIndex = (elapsed/this.interval) + 1;
             int next = (this.interval * intervalIndex);
             return next;
-        }else if(current >= startTime && current == endTime) {
-            return current;
         }
         return -1;
     }
