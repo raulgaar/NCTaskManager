@@ -1,7 +1,7 @@
 package mx.tc.j2se.tasks;
 
 
-public class ArrayTaskListImpl implements ArrayTaskList{
+public class ArrayTaskListImpl extends AbstractTaskList{
     private int size = 0;
     private Task[] taskList = new Task[size];
 
@@ -70,7 +70,7 @@ public class ArrayTaskListImpl implements ArrayTaskList{
             throw new IllegalArgumentException ("Index exceeds the limit of the list");
         }
     }
-
+/*
     @Override
     public ArrayTaskList incoming(int from, int to) {
         if(from < 0 && to < 0 && to < from) {
@@ -79,7 +79,7 @@ public class ArrayTaskListImpl implements ArrayTaskList{
         ArrayTaskList incomingTasks = new ArrayTaskListImpl();
         for (int i = 0; i < size; i++) {
             int nextTaskEvent = taskList[i].nextTimeAfter(from);
-            if ((nextTaskEvent < from) || (nextTaskEvent > to)){
+            if ((nextTaskEvent <= from) || (nextTaskEvent >= to)){
                 continue;
             }
             incomingTasks.add(taskList[i]);
@@ -89,5 +89,5 @@ public class ArrayTaskListImpl implements ArrayTaskList{
         return incomingTasks;
 
 
-    }
+    }*/
 }

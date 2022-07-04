@@ -107,7 +107,8 @@ public class TaskImpl implements Task{
     * @param time
     * */
     @Override
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException{
+        if(time < 0) throw new IllegalArgumentException ("Time cannot be negative");
         this.start = time;
         this.end = time;
         this.interval = 0;
@@ -147,10 +148,17 @@ public class TaskImpl implements Task{
     * @param interval
     * */
     @Override
-    public void setTime(int start, int end, int interval) {
+    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
+        if (interval == 0) {
+            throw new IllegalArgumentException (
+                    "Interval must be greater than 0"
+            );
+        }
+        if (start < 0 || end < 0) {
+            throw new IllegalArgumentException ("Time cannot be negative");
+        }
         if((start > end) || (interval > (end - start))) { //
-            System.out.println("The start time and interval cannot be greater than the end time to be a repetitive task");
-            return;
+            throw new IllegalArgumentException("The start time and interval cannot be greater than the end time to be a repetitive task");
         }
         this.start = start;
         this.end = end;
@@ -165,17 +173,19 @@ public class TaskImpl implements Task{
     * @return repeated
     * */
     @Override
-    public boolean isRepeated() {
+    public boolean isRepeated() throws IllegalArgumentException{
         if(this.interval <= (this.end - this.start) && this.start < this.end) {
             if ((this.interval == 0 && this.repeated)) {
-                System.out.println("This will run forever");
-                return true; //endless loop
+
+                throw new IllegalArgumentException
+                        ("This will run forever");
+                //return true; //endless loop
             } else if (this.interval > 0) {
                 return true;
             } else {
-                System.out.println("Interval must be greater than zero for " +
+                throw new IllegalArgumentException ("Interval must be greater than zero for " +
                                    "repetitive tasks");
-                return false;
+                //return false;
             }
         }else {
             return false;
@@ -187,7 +197,12 @@ public class TaskImpl implements Task{
     * @param current
     * */
     @Override
-    public int nextTimeAfter(int current) {
+    public int nextTimeAfter(int current) throws IllegalArgumentException {
+        if(current < 0){
+            throw new IllegalArgumentException (
+                    "Time cannot be negative insert a positive integer"
+            );
+        }
         int startTime = getTime();         //Local variable for the start time of the task
         int endTime = getEndTime();        //Local variable for the end time of the task
         int next;
