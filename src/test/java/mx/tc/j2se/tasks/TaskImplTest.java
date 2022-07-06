@@ -9,7 +9,7 @@ class TaskImplTest {
     @Test
     void getTitle() {
         Task task = new TaskImpl("This is a title", 1);
-        assertEquals("Task", task.getTitle());
+        assertEquals("This is a title", task.getTitle());
     }
 
     @Test

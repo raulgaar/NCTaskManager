@@ -212,15 +212,15 @@ public class TaskImpl implements Task{
         if (current < startTime) {
             return startTime;
         }
-        if((current + this.interval) <= endTime) {
-            if (this.interval != 0) {
-                int elapsed = current - startTime;
-                int intervalIndex = (elapsed/this.interval) * this.interval;
-                if(intervalIndex != elapsed) {
-                    next = startTime + intervalIndex + this.interval;
-                }else{
-                    next = startTime + elapsed + this.interval;
-                }
+        if (this.interval != 0) {
+            int elapsed = current - startTime;
+            int intervalIndex = (elapsed/this.interval) * this.interval;
+            if(intervalIndex != elapsed) {
+                next = startTime + intervalIndex + this.interval;
+            }else{
+                next = startTime + elapsed + this.interval;
+            }
+            if((next) <= endTime) {
                 return next;
             }
         }
