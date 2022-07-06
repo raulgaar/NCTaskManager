@@ -3,12 +3,18 @@ package mx.tc.j2se.tasks;
 public class LinkedTaskListImpl extends AbstractTaskList{
 
     private Node first;
+    private Node last;
     private int size;
 
     public LinkedTaskListImpl() {
-        first = null;
-        size = 0;
+        first = null; // variable that sets the first node to null when the list is empty
+        size = 0; // variable that sets the size to 0 when the list is empty
+        last = null; // variable that sets the last node to null when the list is empty
     }
+    /*
+     * Adds a task at the end of the linked list
+     * @param task
+     * */
 
     @Override
     public void add(Task task) {
@@ -16,24 +22,30 @@ public class LinkedTaskListImpl extends AbstractTaskList{
         newNode.setTask(task);
         if (first == null){
             first = newNode;
+            last = newNode;
         }else{
-            Node node = first;
-            while (node.getNext() != null){
-                node = node.getNext();
-            }
-             node.setNext(newNode);
+            Node node = last;
+            node.setNext(newNode);
+            last = node.getNext();
         }
         size++;
     }
-
+    /*
+     * Removes a specific task from the linked list of tasks
+     * @param task
+     * */
     @Override
     public boolean remove(Task task) throws IllegalArgumentException{
+        //conditional that checks that the task is not null
         if(task == null){
             throw new IllegalArgumentException("Task cannot be empty");
         }
-        int count = 0;
+        int count = 0; // local variable that indicates how many times the task is on the list
 
-        Node prev = null, next;
+        Node prev = null; //Node that gives the previous task
+        Node next; //Node that gives the next task
+        // For loop to assign the next task to the node of the task that will be deleted and decrement the size of the
+        //linked list
         for (Node node = first; node != null; node = next) {
             next = node.getNext();
             if (node.getTask() == task) {
@@ -52,12 +64,19 @@ public class LinkedTaskListImpl extends AbstractTaskList{
         System.out.print(count > 0 ? ("Task deleted: " + count + "\n") : "Not found\n");
         return count != 0;
     }
-
+    /*
+     * Gets the size of the LinkedTaskList
+     *
+     * */
     @Override
     public int size() {
         return size;
     }
 
+    /*
+     * Gets the task on the given index
+     * @param index
+     * */
     @Override
     public Task getTask(int index) throws IndexOutOfBoundsException{
         if (index >= 0 && index < size){
