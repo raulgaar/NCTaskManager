@@ -25,5 +25,11 @@ public interface Task {
 
         int nextTimeAfter (int current);
 
+        boolean equals(Object o);
+
+        int hashCode();
+
+        String toString();
+
 }
 

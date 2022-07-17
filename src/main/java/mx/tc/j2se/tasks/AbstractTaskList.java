@@ -1,5 +1,8 @@
 package mx.tc.j2se.tasks;
 
+import java.util.Iterator;
+import java.util.stream.Stream;
+
 abstract class AbstractTaskList {
     void add(Task task) {
 
@@ -17,7 +20,18 @@ abstract class AbstractTaskList {
         return null;
     }
 
-    AbstractTaskList incoming(int from, int to) {
+   final AbstractTaskList incoming(int from, int to) {
+        AbstractTaskList incomingTasks = new ArrayTaskListImpl();
+
+        this.getStream().forEach(task -> {
+            if(task.nextTimeAfter(from) <= from || task.nextTimeAfter(from) >= to){
+                incomingTasks.add(task);
+            }
+        });
+        return incomingTasks;
+    }
+
+    AbstractTaskList incomingNoStream(int from, int to) {
         AbstractTaskList incomingTasks = new ArrayTaskListImpl();
 
         int nextTaskEvent;
@@ -31,4 +45,8 @@ abstract class AbstractTaskList {
         }
         return incomingTasks;
     }
+
+    public abstract Iterator<Task> iterator();
+
+    public abstract Stream<Task> getStream();
 }

@@ -15,7 +15,12 @@ class TaskTest {
         assertEquals("test0", task.getTitle());
         assertEquals("test1", task1.getTitle());
         assertEquals("test2", task2.getTitle());
-    //Page 1 paragraph 3
+        assertEquals(1, task.hashCode());
+        assertEquals(2, task1.hashCode());
+        assertEquals(3, task2.hashCode());
+        assertEquals(1, task.hashCode());
+
+        //Page 1 paragraph 3
     }
     @Test
     void validateStatus(){

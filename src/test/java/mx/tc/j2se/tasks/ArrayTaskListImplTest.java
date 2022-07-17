@@ -2,6 +2,8 @@ package mx.tc.j2se.tasks;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayTaskListImplTest {
@@ -140,5 +142,39 @@ class ArrayTaskListImplTest {
         assertEquals(medication, eventOnLapse.getTask(1));
         eventOnLapse = test.incoming(0, 1);
         assertEquals(0, eventOnLapse.size());
+    }
+    @Test
+    void iteratorTest(){
+        AbstractTaskList test = new ArrayTaskListImpl();
+        int counter = 0;
+        Task task0 = new TaskImpl("Test 0", 0, 36, 1); //6
+        Task task1 = new TaskImpl("Test 1", 3);
+        Task task2 = new TaskImpl("Test 2", 50);
+        Task task3 = new TaskImpl("Test 3", 3, 46, 2); //7
+        Task task4 = new TaskImpl("Test 4", 2, 20, 4); //6
+        Task task5 = new TaskImpl("Test 5", 10); //10
+        Task task6 = new TaskImpl("Test 6", 25); //25
+        Task task7 = new TaskImpl("Test 7", 15); //15
+        Task task8 = new TaskImpl("Test 8", 10, 50, 10);//20
+        Task lunch = new TaskImpl("Lunch", 4240);
+        Task run = new TaskImpl("Morning run", 12, 4440,24);
+        Task medication = new TaskImpl("Medication", 4152, 5088, 12);
+        Task meetFriends = new TaskImpl("Meeting friends", 4446);
+        test.add(task0);
+        test.add(task1);
+        test.add(task2);
+        test.add(task3);
+        test.add(task4);
+        test.add(task5);
+        test.add(task6);
+        test.add(task7);
+        test.add(task8);
+        Iterator<Task> tasks = test.iterator();
+        while (tasks.hasNext()) {
+            System.out.println(tasks.next().getTitle());
+            counter++;
+        }
+        System.out.println(counter);
+        assertEquals(9, counter);
     }
 }

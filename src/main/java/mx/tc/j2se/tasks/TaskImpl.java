@@ -7,6 +7,7 @@
  *
  */
 package mx.tc.j2se.tasks;
+import java.util.Objects;
 /*
 *
 * This is an implementation of the Task interface
@@ -24,10 +25,10 @@ public class TaskImpl implements Task{
     private boolean active;         //Status of the task
     private boolean repeated;       //Status of repeatability of the task
 
+    private int id;                 //ID of the task
 
     //Creates a new Task
     public TaskImpl() {
-
     }
 
     /*
@@ -225,6 +226,30 @@ public class TaskImpl implements Task{
             }
         }
         return -1;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == null || o.getClass()!= this.getClass()) {
+            return false;
+        }
+        if(this == o) {
+            return true;
+        }
+        Task task = (Task) o;
+
+        return (task.getTitle() == this.getTitle() && task.getTime() == this.getTime());
+    }
+
+    @Override
+    public int hashCode(){
+        return title.hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return this.getTitle();
     }
 }
 

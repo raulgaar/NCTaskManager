@@ -1,6 +1,9 @@
 package mx.tc.j2se.tasks;
 
-public class LinkedTaskListImpl extends AbstractTaskList{
+import java.util.Iterator;
+import java.util.stream.Stream;
+
+public class LinkedTaskListImpl /*extends AbstractTaskList*/ implements LinkedTaskList{
 
     private Node first;
     private Node last;
@@ -113,8 +116,77 @@ public class LinkedTaskListImpl extends AbstractTaskList{
         }
         return incomingTasks;
     }
+*/
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
 
- */
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                if (size == 0){
+
+                    return false;
+                }
+                return currentIndex < size && getTask(currentIndex) != null;
+            }
+
+            @Override
+            public Task next() throws IndexOutOfBoundsException {
+                if (!hasNext()) {
+                    return null;
+                }
+                return getTask(currentIndex++);
+            }
+        };
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == null || o.getClass()!= this.getClass()) {
+            return false;
+        }
+        if(this == o) {
+            return true;
+        }
+        LinkedTaskListImpl linkedTaskList = (LinkedTaskListImpl) o;
+
+        return (linkedTaskList.size() == this.size());
+    }
+
+    @Override
+    public int hashCode() {
+        LinkedTaskList id = this;
+        return id.hashCode();
+    }
+
+
+    @Override
+    public LinkedTaskList clone() {
+        LinkedTaskList cloneList = null;
+        try {
+            cloneList = (LinkedTaskList) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return cloneList;
+    }
+
+    @Override
+    public Stream<Task> getStream(){
+        Stream.Builder<Task> streamBuilder = Stream.builder();
+
+        Iterator<Task> iterator = this.iterator();
+        while(iterator.hasNext()) {
+            streamBuilder.accept(iterator.next());
+        }
+
+        return streamBuilder.build();
+
+    }
+
     protected static class Node{
         protected Node next;
         protected Task task;
